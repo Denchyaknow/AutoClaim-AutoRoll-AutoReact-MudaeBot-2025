@@ -2,6 +2,7 @@ import os
 import re
 import sys
 import time
+import random
 from datetime import datetime, timezone
 from typing import Dict, List, Optional
 
@@ -193,6 +194,7 @@ def _validate_vars() -> None:
     if post_roll_delay < 0:
         raise ValueError("Vars.postRollCollectDelaySeconds must be >= 0.")
 
+    # Handle both old ms and new seconds config
     reaction_ms = float(getattr(Vars, "reactionDelayMs", 0.0))
     if reaction_ms < 0:
         raise ValueError("Vars.reactionDelayMs must be >= 0.")
@@ -283,9 +285,29 @@ def _extract_message_text(message: dict) -> str:
 
 
 def _reaction_delay_seconds() -> float:
+    """Get reaction delay in seconds. Handles both old ms and new seconds config."""
     if hasattr(Vars, "reactionDelaySeconds"):
         return max(0.0, float(getattr(Vars, "reactionDelaySeconds", 0.0)))
-    return max(0.0, float(getattr(Vars, "reactionDelayMs", 0.0)) / 1000.0)
+    # Legacy: convert milliseconds to seconds if reactionDelayMs is set
+    if hasattr(Vars, "reactionDelayMs"):
+        return max(0.0, float(getattr(Vars, "reactionDelayMs", 0.0)) / 1000.0)
+    return 0.0
+
+
+def _roll_delay_seconds() -> float:
+    """Get roll delay in seconds. Handles both old ms and new seconds config."""
+    if hasattr(Vars, "minRollDelaySeconds") and hasattr(Vars, "maxRollDelaySeconds"):
+        return random.uniform(
+            float(getattr(Vars, "minRollDelaySeconds", 1.2)),
+            float(getattr(Vars, "maxRollDelaySeconds", 2.8))
+        )
+    # Legacy: convert milliseconds to seconds if using ms config
+    if hasattr(Vars, "minRollDelayMs") and hasattr(Vars, "maxRollDelayMs"):
+        return random.uniform(
+            float(getattr(Vars, "minRollDelayMs", 1200)) / 1000.0,
+            float(getattr(Vars, "maxRollDelayMs", 2800)) / 1000.0
+        )
+    return random.uniform(1.2, 2.8)
 
 
 def _parse_discord_timestamp(timestamp_raw: str) -> Optional[float]:
@@ -522,10 +544,19 @@ def simpleRoll() -> None:
 
         _log(f"Starting run | rollCount={roll_count}")
         roll_started_at = time.time()
+        
         for i in range(roll_count):
+            # Trigger the roll command
             _trigger_slash(roll_command)
-            if i < roll_count - 1 and command_delay > 0:
-                time.sleep(command_delay)
+            
+            # Wait for roll delay (randomized) before next roll
+            if i < roll_count - 1:
+                roll_delay = _roll_delay_seconds()
+                if roll_delay > 0:
+                    time.sleep(roll_delay)
+            
+            # After each roll, check for claims/kakera
+            process_recent_roll_results(min_timestamp=roll_started_at - 1.0, quiet_if_empty=True)
 
         if bool(Vars.pokeRoll):
             if command_delay > 0:
@@ -540,6 +571,7 @@ def simpleRoll() -> None:
         if collect_delay > 0:
             time.sleep(collect_delay)
 
+        # Final check for any remaining claims/kakera
         claimed, reacted = process_recent_roll_results(min_timestamp=roll_started_at - 1.0)
 
         _log(f"Run finished | claim={claimed} | kakeraReact={reacted}")

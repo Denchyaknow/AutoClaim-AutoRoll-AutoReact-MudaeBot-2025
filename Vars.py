@@ -196,13 +196,22 @@ desiredSeries = ['VOCALOID',
 'Karakai Jouzu no Takagi-san',
 'Serial Experiments Lain']
 pokeRoll = True
+
+# Roll scheduling mode
+# useRandomRollInterval = True: Bot waits random delays between roll cycles (minRollDelaySeconds to maxRollDelaySeconds)
+# useRandomRollInterval = False: Bot runs rolls at fixed minutes past each hour (e.g., :00, :30)
+useRandomRollInterval = True
+minRollDelaySeconds = 1.2
+maxRollDelaySeconds = 2.8
+
+# Fixed schedule minute (only used when useRandomRollInterval = False)
+# Set to '00' for top of every hour, '30' for :30 past each hour, etc.
+# Range: '00' to '59'
 repeatMinute = '00'
 
 # Claim cooldown settings
 # Number of hours to wait between claims
-claimCooldownHours = 4
-# Maximum number of rolls per hour (x rolls each hour)
-rollsPerHour = 1
+claimCooldownHours = 3
 
 # Delay between command sends (for example: /ma then /p).
 commandDelaySeconds = 1.5
@@ -211,20 +220,14 @@ commandDelaySeconds = 1.5
 postRollCollectDelaySeconds = 2.0
 
 # Delay before claiming/reacting to avoid instant robotic interactions.
-# Use milliseconds here; 1200 means 1.2 seconds.
-reactionDelayMs = 2200
+reactionDelaySeconds = 2.2
 
 # How often the idle status is logged (in minutes).
 # Set to 0 to disable heartbeat logging entirely.
 heartbeatIntervalMinutes = 1
 
-# Randomized roll interval to avoid fixed periodic behavior.
-useRandomRollInterval = True
-minRollDelaySeconds = 3500
-maxRollDelaySeconds = 3900
-
 # Number of roll attempts done each cycle before waiting for the main delay again.
-rollCount = 2
+rollCount = 16
 
 # Optional runtime controls:
 # runOnStart -> run a roll immediately when Bot.py starts.
