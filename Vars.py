@@ -1,9 +1,233 @@
-token = ''  
-channelId = ''                 
-serverId = ''         
-
-rollCommand= 'wa'
+token = 'USerTokenHere'
+channelId = '853098850838118472'
+serverId = '794700691490078740'
+rollCommand = 'ma'
 desiredKakeras = ['kakeraP','kakeraY','kakeraO','kakeraR','kakeraW','kakeraL']
-desiredSeries = ['One Piece','Dragon Ball Z','Death Note']
+desiredSeries = ['VOCALOID',
+'DARLING in the FRANXX',
+'Re:Zero kara Hajimeru Isekai Seikatsu',
+'Kono Subarashii Sekai ni Shukufuku wo!',
+'Fate/stay night',
+'High School DxD',
+'One Piece',
+'Chainsaw Man',
+'Seishun Buta Yarou',
+'Jujutsu Kaisen',
+'NieR: Automata',
+'Sword Art Online',
+'Overlord',
+'Attack on Titan',
+'Kimetsu no Yaiba',
+"Kirby's Dream Land",
+'5-toubun no Hanayome',
+'Violet Evergarden',
+'Sono Bisque Doll wa Koi wo Suru',
+'Akame ga Kill!',
+'Sousou no Frieren',
+'Boku no Hero Academia',
+'Kakegurui',
+'SPY×FAMILY',
+'Kaguya-sama wa Kokurasetai',
+'Date A Live',
+'Neon Genesis Evangelion',
+'Internet Cats',
+'Naruto',
+'Komi-san wa, Comyushou desu.',
+'Fairy Tail',
+'【OSHI NO KO】',
+'hololive',
+'No Game No Life',
+'Code Geass: Hangyaku no Lelouch',
+'Steins;Gate',
+'League of Legends',
+'Kobayashi-san Chi no Maid Dragon',
+'Hunter × Hunter',
+'Danganronpa 2: Goodbye Despair',
+'🤔',
+'Death Note',
+'Tate no Yuusha no Nariagari',
+'Chuunibyou demo Koi ga Shitai!',
+'One Punch Man',
+'BLEACH',
+'Kill la Kill',
+'Marvel',
+'Dragon Ball',
+'Persona 5',
+'Cyberpunk: Edgerunners',
+"JoJo's Bizarre Adventure: Stone Ocean",
+'Resident Evil 2',
+'Soul Eater',
+'Tokyo Ghoul',
+'Hori-san to Miyamura-kun',
+'Ijiranaide, Nagatoro-san',
+'Bocchi the Rock!',
+'Bungou Stray Dogs',
+'UTAU',
+'Berserk',
+'Danganronpa: Trigger Happy Havoc',
+'Adventure Time',
+'Toradora!',
+"JoJo's Bizarre Adventure: Phantom Blood",
+'Godzilla',
+'Koe no Katachi',
+'Kanojo, Okarishimasu',
+'Pretty Soldier Sailor Moon',
+'Mirai Nikki',
+'Genshin Impact',
+'Puella Magi Madoka Magica',
+'Mushoku Tensei',
+'Final Fantasy VII',
+'Utaite',
+'Fate/Grand Order',
+'Rebuild of Evangelion',
+'Dungeon ni Deai wo Motomeru no wa Machigatteiru Darou ka',
+'Monogatari',
+'Sonic the Hedgehog',
+'Super Crown',
+'Scream',
+'Wonder Egg Priority',
+'Solo Leveling',
+'Teen Titans',
+'Yahari Ore no Seishun Love Comedy wa Machigatteiru.',
+'Pokédex',
+'Dragon Ball Z',
+'Black Clover',
+'Houseki no Kuni',
+'Persona 3',
+'Nana',
+'Omniscient Reader\'s Viewpoint',
+'Cowboy Bebop',
+'DC',
+'86 -Eighty Six-',
+'Project SEKAI: Colorful Stage!',
+'Mob Psycho 100',
+'Haikyuu!!',
+'Panty & Stocking with Garterbelt',
+'Fullmetal Alchemist',
+'Ookami to Koushinryou',
+'Made in Abyss',
+'K-ON!',
+'Charlotte',
+"Howl's Moving Castle",
+'Tengen Toppa Gurren Lagann',
+'Kimi no Na wa.',
+'Honkai Impact 3rd',
+"JoJo's Bizarre Adventure: Stardust Crusaders",
+'Hello Kitty',
+"Five Nights at Freddy's 2",
+'Another',
+'Sewayaki Kitsune no Senko-san',
+'Sakurasou no Pet na Kanojo',
+'{ tákt op. }',
+'Hollow Knight',
+'Owari no Seraph',
+'Tsukihime',
+'Nisekoi',
+'Hyouka',
+'Doki Doki Literature Club!',
+'My Melody',
+'Among Us',
+'Yakusoku no Neverland',
+'Love Live! School idol project',
+'Gudetama',
+'Majo no Tabitabi',
+'Spirited Away',
+'Shigatsu wa Kimi no Uso',
+'RWBY',
+'Tomb Raider',
+'Bayonetta',
+'Plastic Memories',
+'Vinland Saga',
+'Scott Pilgrim',
+'UNDERTALE',
+'Suzumiya Haruhi no Yuuutsu',
+'Shrek',
+'Minecraft',
+'Alien',
+'Blue Lock',
+'Princess Mononoke',
+'Pokémon Diamond/Pearl/Platinum',
+'Pokémon: Indigo League',
+'Pokémon X/Y',
+'Pokémon Black/White',
+'Pokémon Sword/Shield',
+'Pokémon Red/Green/Blue/Yellow',
+'Star Wars Original Trilogy',
+'InuYasha',
+'Durarara!!',
+'Team Fortress 2',
+'BEASTARS',
+'Hazbin Hotel',
+'The Last of Us Part I',
+'Avatar: The Last Airbender',
+'The Legend of Korra',
+'Honkai: Star Rail',
+'Red Dead Redemption 2',
+'SpongeBob SquarePants',
+'Gintama',
+'Invader Zim',
+'Guilty Crown',
+'Hotel Transylvania',
+'Noragami',
+'Fruits Basket',
+'Azumanga Daioh',
+'Dr. STONE',
+'Hellsing',
+'Arifureta Shokugyou de Sekai Saikyou',
+'Phoenix Wright: Ace Attorney',
+'Yu-Gi-Oh! Trading Card Game',
+'Nekopara',
+'To LOVE-Ru',
+'Hyperdimension Neptunia',
+'Tian Guan Ci Fu',
+'Umamusume: Pretty Derby',
+'Vanitas no Carte',
+'Lycoris Recoil',
+'Tensei shitara Slime Datta Ken',
+'Banana Fish',
+"Castlevania III: Dracula's Curse",
+'Rat Movie',
+'Meru The Succubus',
+'Tejina-senpai',
+'GATE',
+'Assassination Classroom',
+'My Little Pony: Friendship Is Magic',
+'Blend S',
+'Karakai Jouzu no Takagi-san',
+'Serial Experiments Lain']
 pokeRoll = True
-repeatMinute = '25'
+repeatMinute = '00'
+
+# Claim cooldown settings
+# Number of hours to wait between claims
+claimCooldownHours = 4
+# Maximum number of rolls per hour (x rolls each hour)
+rollsPerHour = 1
+
+# Delay between command sends (for example: /ma then /p).
+commandDelaySeconds = 1.5
+
+# Wait after rolling before scanning messages for claim/kakera actions.
+postRollCollectDelaySeconds = 2.0
+
+# Delay before claiming/reacting to avoid instant robotic interactions.
+# Use milliseconds here; 1200 means 1.2 seconds.
+reactionDelayMs = 2200
+
+# How often the idle status is logged (in minutes).
+# Set to 0 to disable heartbeat logging entirely.
+heartbeatIntervalMinutes = 1
+
+# Randomized roll interval to avoid fixed periodic behavior.
+useRandomRollInterval = True
+minRollDelaySeconds = 3500
+maxRollDelaySeconds = 3900
+
+# Number of roll attempts done each cycle before waiting for the main delay again.
+rollCount = 2
+
+# Optional runtime controls:
+# runOnStart -> run a roll immediately when Bot.py starts.
+# resetScheduleFromNow -> after immediate run, schedule next runs every 60 minutes from now.
+runOnStart = True
+resetScheduleFromNow = False

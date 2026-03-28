@@ -14,7 +14,7 @@ These files make it possible to use the Mudae Discord Bot 24/7 without any human
 
 ## Files
 This repository contains 3 different files:
-| File Name | File Purpose | File Purpose |
+| File Name | File Purpose | What to do |
 | ------ | ------ |------ |
 | Vars.py | Where the variables that you need to change are stored | Edit it!
 | Bot.py | The bot is launched from here | Execute it!
@@ -23,7 +23,7 @@ This repository contains 3 different files:
 ## Requirements
 This bot requires the following libraries in order to work correctly. Make sure you have them all installed.
 [Discum](https://pypi.org/project/discum/) for message management.
-[Schedule](https://nodejs.org/) in order to be permanently executed at an exact minute of an hour.
+[Schedule](https://pypi.org/project/schedule/) in order to be permanently executed at an exact minute of an hour.
 
 ```python
 pip install discum
@@ -31,7 +31,7 @@ pip install schedule
 ```
 
 ## How to set up /use
-##### Pakages
+##### Packages
 To use this bot you just need to set up a few things. Make sure python 3 is installed along with the 2 required libraries (Discum and Schedule).
 If you don't know how to do it, read here → [How to install a Python package](https://packaging.python.org/en/latest/tutorials/installing-packages/)
 
@@ -40,9 +40,9 @@ Time to open Vars.py. Here you decide what settings the bot will have. In this s
 You also choose what Discord account you want to execute the code in and on what guild channel you want the bot to execute the Mudae commands. These two decision will be reflected in these two variables.
 
 **Mandatory variables** : You will have to fill them in if you want the bot to work
-+ `token` - The discord Token of the account you want to bot with → [How to get a Discord Token](https://www.androidauthority.com/get-discord-token-3149920/)
-+ `channelId` - ID of the channel you want to roll in → [How to get a channel ID](https://docs.statbot.net/docs/faq/general/how-find-id/)  
-+ `serverId` - ID of the server/guild you want to roll in → [How to get a server/guild ID](https://docs.statbot.net/docs/faq/general/how-find-id/)  
++ `token` - The discord token of the account you want to bot with (replace `PUT_TOKEN_HERE` in Vars.py)
++ `channelId` - ID of the channel you want to roll in (replace `PUT_CHANNEL_ID_HERE`)  
++ `serverId` - ID of the server/guild you want to roll in (replace `PUT_SERVER_ID_HERE`)  
 
 **Optional variables** : They are already filled by default, but you can change them if you want (specialy the desiredSeries one)
 
@@ -51,15 +51,24 @@ You also choose what Discord account you want to execute the code in and on what
 + `desiredSeries` - **Case-sensitive** - Array of series between single quotes separated by comas (see example below)
 + `pokeRoll` - If you want to also roll the Mudae´s Pokeslot (True or False)
 + `repeatMinute` - You can choose what exact minute of the hour will the Bot roll (value between 00 and 59, will be set to 25 by default)
++ `commandDelaySeconds` - Delay between commands (for example between `/ma` and `/p`)
++ `postRollCollectDelaySeconds` - Delay after rolling before scanning Mudae responses
++ `reactionDelayMs` - Delay before claim/kakera clicks/reactions (milliseconds)
++ `reactionDelaySeconds` - Optional alternative to `reactionDelayMs` (seconds, takes priority if set)
++ `heartbeatIntervalSeconds` - How often idle status is logged (default 60 seconds)
++ `useRandomRollInterval` - If True, rolls are scheduled with random intervals instead of a fixed `repeatMinute`
++ `minRollDelaySeconds` - Minimum randomized delay between runs
++ `maxRollDelaySeconds` - Maximum randomized delay between runs
++ `rollCount` - Number of roll attempts done each cycle before waiting for the next main delay window
 
 ##### Example of correctly filled variables
 Depending on the variable type (boolean, string, int or array), the data might be between quotes or not. Please pay attention to it.
 In the example, the token, channelId and serverdId are invented fields.
 ```python
-token = 'MTE4MDIyNzU4NTUzNjQzNDMxNw.GDXjNH.YqGhIq7GwyVHSk9sf9zod3AACAffJeZiynTexc' 
+token = 'PUT_YOUR_TOKEN_HERE' 
 channelId = '1182144443902599230'                 
 serverId = '816317249082097684'                  
-rollCommand= 'wa'
+rollCommand = 'wa'
 desiredKakeras= ['kakeraP','kakeraY','kakeraO','kakeraR','kakeraW','kakeraL']
 desiredSeries = ['One Piece','Dragon Ball Z','Death Note']
 pokeRoll = True
@@ -72,6 +81,12 @@ This will open the file and start the Bot, logging all the rolls and actions mad
 (note that if you set the minute to 25, the bot won't roll until it's that time every hour)
 - Red heart -> already claimed cards
 - White heart -> not claimed yet cards
+
+Run with:
+
+```python
+python Bot.py
+```
 
 ## Possible Errors
 - Mudae has no access/write/read permission to the channel you decided
