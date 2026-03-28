@@ -32,6 +32,13 @@ _last_roll_time: Optional[float] = None
 _last_claim_message_timestamp: Optional[float] = None
 
 
+def _effective_last_claim_timestamp() -> Optional[float]:
+    """Return the best known timestamp for the most recent successful claim."""
+    if _last_claim_message_timestamp is not None:
+        return _last_claim_message_timestamp
+    return _last_claim_time
+
+
 def _log(message: str) -> None:
     now = time.strftime("%Y-%m-%d %H:%M:%S")
     print(f"[{now}] {message}")
@@ -349,16 +356,24 @@ def _action_already_processed(key: str) -> bool:
 
 def _can_claim_now() -> bool:
     """Check if enough time has passed since the last successful claim."""
-    global _last_claim_time
-    
     cooldown_hours = float(getattr(Vars, "claimCooldownHours", 4))
     cooldown_seconds = cooldown_hours * 3600
-    
-    if _last_claim_time is None:
+
+    last_claim_ts = _effective_last_claim_timestamp()
+    if last_claim_ts is None:
         return True
-    
-    time_since_last_claim = time.time() - _last_claim_time
+
+    time_since_last_claim = time.time() - last_claim_ts
     return time_since_last_claim >= cooldown_seconds
+
+
+def claim_cooldown_remaining_seconds() -> float:
+    """Return how many seconds remain until a claim can be made again."""
+    cooldown_seconds = float(getattr(Vars, "claimCooldownHours", 4)) * 3600
+    last_claim_ts = _effective_last_claim_timestamp()
+    if last_claim_ts is None:
+        return 0.0
+    return max(0.0, cooldown_seconds - (time.time() - last_claim_ts))
 
 
 def _mark_claim_successful(message: Optional[dict] = None) -> None:
