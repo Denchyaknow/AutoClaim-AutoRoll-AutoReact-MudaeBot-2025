@@ -3,7 +3,12 @@ import re
 import random
 
 import Vars
-from Function import process_recent_roll_results, simpleRoll, _get_status_message
+from Function import (
+    process_recent_roll_results,
+    simpleRoll,
+    _get_status_message,
+    claim_cooldown_remaining_seconds,
+)
 
 
 def _log(message: str) -> None:
@@ -68,12 +73,14 @@ def _compute_next_hourly_run(minute_str: str, now_epoch: float) -> float:
 
 
 def _random_roll_window() -> tuple[float, float]:
-    minimum = float(getattr(Vars, "minRollDelaySeconds", 3500))
-    maximum = float(getattr(Vars, "maxRollDelaySeconds", 3900))
+    minimum = float(getattr(Vars, "minCycleDelaySeconds", 3500))
+    maximum = float(getattr(Vars, "maxCycleDelaySeconds", 3900))
     if minimum <= 0 or maximum <= 0:
-        raise ValueError("Vars.minRollDelaySeconds and Vars.maxRollDelaySeconds must be > 0.")
+        raise ValueError("Vars.minCycleDelaySeconds and Vars.maxCycleDelaySeconds must be > 0.")
     if minimum > maximum:
-        raise ValueError("Vars.minRollDelaySeconds cannot be greater than Vars.maxRollDelaySeconds.")
+        raise ValueError("Vars.minCycleDelaySeconds cannot be greater than Vars.maxCycleDelaySeconds.")
+    minimum = max(3600.0, minimum)
+    maximum = max(minimum, maximum)
     return minimum, maximum
 
 
@@ -82,16 +89,27 @@ def _compute_next_random_run(now_epoch: float) -> float:
     return now_epoch + random.uniform(minimum, maximum)
 
 
+def _should_run_cycle() -> bool:
+    remaining = claim_cooldown_remaining_seconds()
+    if remaining > 0:
+        _log(
+            "Skipping run: claim cooldown still active for "
+            f"{_format_duration(remaining)}."
+        )
+        return False
+    return True
+
+
 def main() -> None:
     _validate_startup_config()
 
     use_random = bool(getattr(Vars, "useRandomRollInterval", False))
     if use_random:
-        _random_roll_window()
+        min_cycle, max_cycle = _random_roll_window()
         next_run_epoch = _compute_next_random_run(time.time())
         _log(
             "Scheduler started in random mode "
-            f"({Vars.minRollDelaySeconds}s-{Vars.maxRollDelaySeconds}s)."
+            f"({_format_duration(min_cycle)}-{_format_duration(max_cycle)} between runs)."
         )
     else:
         next_run_epoch = _compute_next_hourly_run(str(Vars.repeatMinute), time.time())
@@ -104,7 +122,10 @@ def main() -> None:
     reset_schedule_from_now = bool(getattr(Vars, "resetScheduleFromNow", False))
     if run_on_start:
         _log("runOnStart enabled: executing one immediate roll.")
-        simpleRoll()
+        if _should_run_cycle():
+            simpleRoll()
+        else:
+            _log("Immediate run skipped due to active claim cooldown.")
         if reset_schedule_from_now:
             if use_random:
                 next_run_epoch = _compute_next_random_run(time.time())
@@ -112,6 +133,13 @@ def main() -> None:
             else:
                 next_run_epoch = time.time() + 3600
                 _log("resetScheduleFromNow enabled: next run is 60 minutes from now.")
+        else:
+            now = time.time()
+            if next_run_epoch <= now:
+                if use_random:
+                    next_run_epoch = _compute_next_random_run(now)
+                else:
+                    next_run_epoch = _compute_next_hourly_run(str(Vars.repeatMinute), now)
         _log(f"Immediate run complete. Next run at {_next_run_text(next_run_epoch)}")
 
     last_heartbeat = 0.0
@@ -130,7 +158,8 @@ def main() -> None:
             last_idle_scan = now
 
         if now >= next_run_epoch:
-            simpleRoll()
+            if _should_run_cycle():
+                simpleRoll()
             now = time.time()
             if use_random:
                 next_run_epoch = _compute_next_random_run(now)
